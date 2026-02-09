@@ -1,0 +1,24 @@
+{% extends 'sekolah/base.html' %}
+
+{% block title %}{{ halaman.judul }} - SMA Y8199{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb p-3 bg-light rounded-3">
+    <li class="breadcrumb-item"><a href="{% url 'beranda' %}" class="text-decoration-none">Beranda</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ halaman.judul }}</li>
+  </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="bg-white p-5 rounded-4 shadow-sm border">
+            <h1 class="display-5 fw-bold mb-4 border-bottom pb-3">{{ halaman.judul }}</h1>
+            
+            <div class="content fs-5 lh-lg text-secondary">
+                {{ halaman.konten|safe }}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

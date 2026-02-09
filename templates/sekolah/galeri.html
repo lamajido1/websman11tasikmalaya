@@ -1,0 +1,24 @@
+{% extends 'sekolah/base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="mb-4 text-center fw-bold">Galeri</h2>
+    <div class="row">
+        {% for item in galeri_list %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{{ item.gambar.url }}" class="card-img-top" alt="{{ item.judul }}" style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ item.judul }}</h5>
+                    <p class="card-text text-muted small"><i class="bi bi-calendar"></i> {{ item.tanggal }}</p>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p>Belum ada galeri foto.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

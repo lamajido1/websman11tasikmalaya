@@ -1,0 +1,67 @@
+{% extends 'sekolah/base.html' %}
+
+{% block title %}Berita - SMA Y8199{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-5 border-bottom pb-3">
+    <div>
+        {% if kategori %}
+        <h1 class="fw-bold text-dark">Kategori: {{ kategori.nama }}</h1>
+        <p class="text-muted mb-0">Menampilkan berita dalam kategori {{ kategori.nama }}.</p>
+        <a href="{% url 'berita_list' %}" class="btn btn-sm btn-outline-primary mt-2"><i class="bi bi-arrow-left"></i> Lihat Semua Berita</a>
+        {% else %}
+        <h1 class="fw-bold text-dark">Arsip Berita</h1>
+        <p class="text-muted mb-0">Informasi terbaru seputar kegiatan dan prestasi sekolah.</p>
+        {% endif %}
+    </div>
+    <div class="d-none d-md-block">
+        <!-- <button class="btn btn-outline-secondary rounded-pill"><i class="bi bi-filter"></i> Filter</button> -->
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="list-group list-group-flush">
+            {% for berita in berita_list %}
+            <a href="{% url 'berita_detail' berita.slug %}" class="list-group-item list-group-item-action p-4 mb-3 border rounded-3 shadow-sm hover-bg-light">
+                <div class="d-flex w-100 justify-content-between align-items-start mb-2">
+                    <h4 class="mb-1 fw-bold text-primary">{{ berita.judul }}</h4>
+                    <small class="text-muted text-nowrap ms-3"><i class="bi bi-clock me-1"></i> {{ berita.tanggal_publikasi|date:"d M Y" }}</small>
+                </div>
+                <p class="mb-3 text-secondary">{{ berita.konten|truncatewords:30 }}</p>
+                <div class="d-flex align-items-center">
+                    <div class="avatar bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 30px; height: 30px; font-size: 0.8rem;">
+                        {{ berita.penulis|first|upper }}
+                    </div>
+                    <small class="text-muted">Ditulis oleh: <strong>{{ berita.penulis }}</strong></small>
+                </div>
+            </a>
+            {% empty %}
+            <div class="text-center py-5">
+                <i class="bi bi-newspaper fs-1 text-muted mb-3 d-block"></i>
+                <p class="text-muted">Belum ada berita yang dipublikasikan.</p>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination Placeholder (Optional) -->
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<style>
+    .hover-bg-light:hover {
+        background-color: #f8f9fa;
+        transform: translateX(5px);
+        transition: all 0.2s ease;
+    }
+</style>
+{% endblock %}

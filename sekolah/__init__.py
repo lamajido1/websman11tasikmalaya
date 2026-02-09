@@ -1,0 +1,3 @@
+"""
+Sekolah App
+"""

@@ -1,0 +1,131 @@
+{% extends 'sekolah/base.html' %}
+
+{% block title %}Beranda - SMA Y8199{% endblock %}
+
+{% block content %}
+<!-- Hero Section / Slider -->
+{% if slider_list %}
+<div id="heroCarousel" class="carousel slide mb-5 rounded-3 overflow-hidden shadow" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        {% for slider in slider_list %}
+        <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+        {% endfor %}
+    </div>
+    <div class="carousel-inner">
+        {% for slider in slider_list %}
+        <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="5000">
+            <img src="{{ slider.gambar.url }}" class="d-block w-100" alt="{{ slider.judul }}" style="height: 500px; object-fit: cover; filter: brightness(0.6);">
+            <div class="carousel-caption d-none d-md-block text-start p-5 mb-4">
+                <h1 class="display-4 fw-bold">{{ slider.judul }}</h1>
+                {% if slider.subjudul %}
+                <p class="fs-4">{{ slider.subjudul }}</p>
+                {% endif %}
+                <a href="{% url 'berita_list' %}" class="btn btn-primary btn-lg mt-3 rounded-pill fw-bold">Selengkapnya</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+{% else %}
+<!-- Default Hero Section if no slider -->
+<div class="p-5 mb-5 rounded-3 text-white shadow" style="background: linear-gradient(135deg, #0d6efd 0%, #0099ff 100%);">
+    <div class="container-fluid py-5">
+      <h1 class="display-4 fw-bold">Selamat Datang di SMA Y8199</h1>
+      <p class="col-md-8 fs-5 mt-3">Mewujudkan generasi berprestasi, berakhlak mulia, dan siap bersaing di era global.</p>
+      <div class="mt-4">
+        <a class="btn btn-light btn-lg text-primary fw-bold me-2" href="{% url 'profil' %}" role="button">
+            <i class="bi bi-info-circle-fill"></i> Profil Sekolah
+        </a>
+        <a class="btn btn-outline-light btn-lg fw-bold" href="{% url 'berita_list' %}" role="button">
+            <i class="bi bi-newspaper"></i> Baca Berita
+        </a>
+      </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row g-4">
+    <!-- Kolom Berita -->
+    <div class="col-lg-8">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="fw-bold text-dark border-start border-5 border-primary ps-3">Berita Terbaru</h2>
+            <a href="{% url 'berita_list' %}" class="btn btn-outline-primary btn-sm rounded-pill">Lihat Semua <i class="bi bi-arrow-right"></i></a>
+        </div>
+        
+        {% for berita in berita_list %}
+        <div class="card mb-4 border-0 shadow-sm rounded-3 overflow-hidden">
+            <div class="row g-0 align-items-stretch">
+                <div class="col-md-4">
+                    {% if berita.gambar %}
+                    <img src="{{ berita.gambar.url }}" alt="{{ berita.judul }}" class="img-fluid w-100 h-100" style="object-fit: cover; min-height: 180px;">
+                    {% else %}
+                    <div class="bg-secondary bg-opacity-10 d-flex align-items-center justify-content-center text-secondary" style="min-height: 180px; height: 100%;">
+                        <i class="bi bi-image fs-1"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">
+                            <a href="{% url 'berita_detail' berita.slug %}" class="text-decoration-none text-dark stretched-link">{{ berita.judul }}</a>
+                        </h5>
+                        <p class="card-text text-muted small mb-2">
+                            <i class="bi bi-calendar-event"></i> {{ berita.tanggal_publikasi|date:"d F Y" }}
+                        </p>
+                        <p class="card-text">{{ berita.konten|truncatewords:20 }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle"></i> Belum ada berita yang diterbitkan.
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Kolom Pengumuman & Sidebar -->
+    <div class="col-lg-4">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white border-bottom-0 pt-4 pb-0">
+                <h4 class="fw-bold text-dark border-start border-5 border-warning ps-3">Pengumuman</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for pengumuman in pengumuman_list %}
+                    <li class="list-group-item px-0 py-3">
+                        <div class="d-flex w-100 justify-content-between align-items-center mb-1">
+                            <h6 class="mb-0 fw-bold text-primary">{{ pengumuman.judul }}</h6>
+                            <small class="badge bg-light text-secondary">{{ pengumuman.tanggal|date:"d M" }}</small>
+                        </div>
+                        <p class="mb-0 small text-muted">{{ pengumuman.isi|truncatewords:15 }}</p>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item text-center text-muted py-4">
+                        <i class="bi bi-bell-slash fs-4 d-block mb-2"></i>
+                        Tidak ada pengumuman aktif.
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Tautan Cepat / Widget Lain -->
+        <div class="card border-0 shadow-sm bg-primary text-white">
+            <div class="card-body p-4 text-center">
+                <h5 class="fw-bold mb-3">Pendaftaran Siswa Baru</h5>
+                <p class="small mb-4">Bergabunglah bersama kami untuk masa depan yang lebih cerah.</p>
+                <a href="#" class="btn btn-light text-primary w-100 fw-bold rounded-pill">Daftar Sekarang</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

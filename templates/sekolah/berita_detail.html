@@ -1,0 +1,54 @@
+{% extends 'sekolah/base.html' %}
+
+{% block title %}{{ berita.judul }} - SMA Y8199{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb p-3 bg-light rounded-3">
+    <li class="breadcrumb-item"><a href="{% url 'beranda' %}" class="text-decoration-none">Beranda</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'berita_list' %}" class="text-decoration-none">Berita</a></li>
+    <li class="breadcrumb-item active text-truncate" style="max-width: 300px;" aria-current="page">{{ berita.judul }}</li>
+  </ol>
+</nav>
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <article class="blog-post bg-white p-5 rounded-4 shadow-sm border">
+            <h1 class="blog-post-title display-5 fw-bold mb-3">{{ berita.judul }}</h1>
+            <div class="blog-post-meta text-muted mb-4 pb-4 border-bottom d-flex align-items-center">
+                <i class="bi bi-calendar-check me-2"></i> {{ berita.tanggal_publikasi|date:"d F Y, H:i" }} 
+                <span class="mx-3">|</span>
+                <i class="bi bi-folder me-2"></i> 
+                {% if berita.kategori %}
+                    <a href="{% url 'kategori_berita' berita.kategori.slug %}" class="text-decoration-none fw-bold ms-1">{{ berita.kategori.nama }}</a>
+                {% else %}
+                    Uncategorized
+                {% endif %}
+                <span class="mx-3">|</span>
+                <i class="bi bi-person me-2"></i> Oleh <a href="#" class="text-decoration-none fw-bold ms-1">{{ berita.penulis }}</a>
+            </div>
+
+            {% if berita.gambar %}
+            <div class="mb-4 rounded-3 overflow-hidden shadow-sm">
+                <img src="{{ berita.gambar.url }}" class="img-fluid w-100" alt="{{ berita.judul }}">
+            </div>
+            {% endif %}
+
+            <div class="content fs-5 lh-lg text-secondary text-justify">
+                {{ berita.konten|linebreaks }}
+            </div>
+            
+            <div class="mt-5 pt-4 border-top">
+                <h5 class="fw-bold mb-3">Bagikan Berita Ini:</h5>
+                <button class="btn btn-outline-primary rounded-circle me-2"><i class="bi bi-facebook"></i></button>
+                <button class="btn btn-outline-info rounded-circle me-2"><i class="bi bi-twitter"></i></button>
+                <button class="btn btn-outline-success rounded-circle me-2"><i class="bi bi-whatsapp"></i></button>
+            </div>
+        </article>
+        
+        <div class="mt-4 text-center">
+            <a href="{% url 'berita_list' %}" class="btn btn-secondary rounded-pill px-4"><i class="bi bi-arrow-left me-2"></i> Kembali ke Daftar Berita</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

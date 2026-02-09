@@ -1,0 +1,20 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}
+    {% if sekolah %}{{ sekolah.nama_sekolah }} Admin{% else %}{{ site_title|default:_('Django site admin') }}{% endif %} | {{ site_title|default:_('Django site admin') }}
+{% endblock %}
+
+{% block branding %}
+<div id="site-name">
+    <a href="{% url 'admin:index' %}">
+        {% if sekolah %}
+            {{ sekolah.nama_sekolah }}
+        {% else %}
+            {{ site_header|default:_('Django administration') }}
+        {% endif %}
+    </a>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

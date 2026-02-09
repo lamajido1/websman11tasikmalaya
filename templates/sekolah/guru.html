@@ -1,0 +1,54 @@
+{% extends 'sekolah/base.html' %}
+
+{% block title %}Daftar Guru - SMA Y8199{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="fw-bold display-5 text-primary">Daftar Guru & Staf</h1>
+    <p class="text-secondary lead">Tenaga pendidik profesional yang siap membimbing siswa menuju kesuksesan.</p>
+</div>
+
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for guru in guru_list %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden hover-shadow transition">
+            <div class="position-relative">
+                {% if guru.foto %}
+                <img src="{{ guru.foto.url }}" class="card-img-top" alt="{{ guru.nama }}" style="height: 300px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light text-secondary d-flex align-items-center justify-content-center" style="height: 300px;">
+                    <i class="bi bi-person-circle" style="font-size: 5rem;"></i>
+                </div>
+                {% endif %}
+                <div class="position-absolute bottom-0 start-0 w-100 p-3 bg-gradient-dark text-white" style="background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);">
+                </div>
+            </div>
+            <div class="card-body text-center p-4">
+                <h4 class="card-title fw-bold mb-1">{{ guru.nama }}</h4>
+                <span class="badge bg-primary bg-opacity-10 text-primary rounded-pill px-3 py-2 mb-3">{{ guru.mata_pelajaran }}</span>
+                <p class="card-text text-muted small"><i class="bi bi-card-heading me-1"></i> NIP: {{ guru.nip|default:"-" }}</p>
+            </div>
+            <div class="card-footer bg-white border-0 pb-4 text-center">
+                <a href="#" class="btn btn-outline-primary rounded-pill btn-sm px-4">Lihat Profil Lengkap</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="alert alert-warning d-inline-block px-5 rounded-pill">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i> Data guru belum tersedia saat ini.
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<style>
+    .hover-shadow:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 1rem 3rem rgba(0,0,0,.175)!important;
+    }
+    .transition {
+        transition: all .3s ease;
+    }
+</style>
+{% endblock %}

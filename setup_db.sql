@@ -1,0 +1,4 @@
+CREATE DATABASE IF NOT EXISTS smay8199_web;
+CREATE USER IF NOT EXISTS 'smay8199_lamajido'@'localhost' IDENTIFIED BY '8~]iY4f%*3ZRs$9E';
+GRANT ALL PRIVILEGES ON smay8199_web.* TO 'smay8199_lamajido'@'localhost';
+FLUSH PRIVILEGES;

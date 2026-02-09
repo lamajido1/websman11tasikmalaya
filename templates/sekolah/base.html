@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ sekolah.nama_sekolah|default:"Website Sekolah" }}{% endblock %}</title>
+    {% if sekolah.favicon %}
+    <link rel="icon" href="{{ sekolah.favicon.url }}">
+    {% endif %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts: Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <style>
+      body {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f8f9fa;
+      }
+      .navbar {
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1030; /* Bootstrap standard for fixed/sticky navbar */
+      }
+      
+      /* Multi-level Dropdown CSS */
+      @media all and (min-width: 992px) {
+        .dropdown-menu li { position: relative; }
+        .dropdown-menu .submenu { 
+          display: none;
+          position: absolute;
+          left: 100%; top: -7px;
+        }
+        .dropdown-menu .submenu-left { 
+          right: 100%; left: auto;
+        }
+        .dropdown-menu > li:hover { background-color: #f1f1f1; }
+        .dropdown-menu > li:hover > .submenu { display: block; }
+      }
+      /* Mobile view */
+      @media (max-width: 991px) {
+        .dropdown-menu .submenu {
+            margin-left: 1rem;
+            margin-right: 1rem;
+            display: block;
+        }
+      }
+
+      .card {
+        border: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      }
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      }
+      .btn-primary {
+        background-color: #0d6efd;
+        border: none;
+        padding: 10px 25px;
+        border-radius: 50px;
+      }
+      footer {
+        background-color: #212529;
+        color: white;
+      }
+      .text-justify {
+        text-align: justify;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'beranda' %}">
+          {% if sekolah.logo %}
+          <img src="{{ sekolah.logo.url }}" alt="Logo" height="30" class="d-inline-block align-text-top me-2">
+          {% endif %}
+          {{ sekolah.nama_sekolah|default:"SMA Y8199" }}
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            {% if menu_navigasi %}
+              {% load mptt_tags %}
+              {% recursetree menu_navigasi %}
+                {% if node.level == 0 %}
+                  <li class="nav-item {% if not node.is_leaf_node %}dropdown{% endif %}">
+                    <a class="nav-link fw-semibold {% if not node.is_leaf_node %}dropdown-toggle{% endif %}" 
+                       href="{% if node.is_leaf_node %}{{ node.url }}{% else %}#{% endif %}" 
+                       {% if not node.is_leaf_node %}id="dropdownMenuLink{{ node.pk }}" role="button" data-bs-toggle="dropdown" aria-expanded="false"{% endif %}>
+                      {{ node.nama }}
+                    </a>
+                    {% if not node.is_leaf_node %}
+                      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink{{ node.pk }}">
+                        {{ children }}
+                      </ul>
+                    {% endif %}
+                  </li>
+                {% else %}
+                  {% if node.is_leaf_node %}
+                    <li>
+                      <a class="dropdown-item" href="{{ node.url }}">{{ node.nama }}</a>
+                    </li>
+                  {% else %}
+                    <li class="dropdown-submenu">
+                      <a class="dropdown-item dropdown-toggle" href="#">{{ node.nama }}</a>
+                      <ul class="dropdown-menu submenu">
+                        {{ children }}
+                      </ul>
+                    </li>
+                  {% endif %}
+                {% endif %}
+              {% endrecursetree %}
+            {% else %}
+              <li class="nav-item">
+                <a class="nav-link active fw-semibold" href="{% url 'beranda' %}">Beranda</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-semibold" href="{% url 'profil' %}">Profil</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-semibold" href="{% url 'guru' %}">Guru</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link fw-semibold" href="{% url 'berita_list' %}">Berita</a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer class="bg-dark text-white text-center text-lg-start mt-5 py-4">
+      <div class="container">
+        <div class="row">
+            <div class="col-md-6 text-md-start mb-3 mb-md-0">
+                <h5 class="fw-bold">{{ sekolah.nama_sekolah|default:"SMA Y8199 Tasikmalaya" }}</h5>
+                <p class="small text-white-50">{{ sekolah.slogan|default:"Mewujudkan generasi cerdas, berkarakter, dan kompetitif." }}</p>
+                {% if sekolah.alamat or sekolah.telepon or sekolah.email %}
+                <div class="small text-white-50 mt-2">
+                    {% if sekolah.alamat %}<i class="bi bi-geo-alt me-1"></i> {{ sekolah.alamat }}<br>{% endif %}
+                    {% if sekolah.telepon %}<i class="bi bi-telephone me-1"></i> {{ sekolah.telepon }}<br>{% endif %}
+                    {% if sekolah.email %}<i class="bi bi-envelope me-1"></i> {{ sekolah.email }}{% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="col-md-6 text-md-end">
+                <div class="mb-2">
+                    {% if sekolah.facebook %}<a href="{{ sekolah.facebook }}" class="text-white me-2"><i class="bi bi-facebook"></i></a>{% endif %}
+                    {% if sekolah.instagram %}<a href="{{ sekolah.instagram }}" class="text-white me-2"><i class="bi bi-instagram"></i></a>{% endif %}
+                    {% if sekolah.twitter %}<a href="{{ sekolah.twitter }}" class="text-white me-2"><i class="bi bi-twitter-x"></i></a>{% endif %}
+                    {% if sekolah.youtube %}<a href="{{ sekolah.youtube }}" class="text-white"><i class="bi bi-youtube"></i></a>{% endif %}
+                </div>
+                <p class="mb-0">{{ sekolah.copyright|default:"© 2026 Copyright SMA Y8199." }}</p>
+                <p class="small text-white-50">All rights reserved.</p>
+            </div>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>
