@@ -40,6 +40,7 @@ Panduan ini akan membantu Anda menginstall website di cPanel menggunakan **GitHu
         *   **Username**: Username GitHub Anda.
         *   **Password**: **BUKAN password login biasa**, tapi **Personal Access Token**.
         *   *Cara buat Token: Buka GitHub > Settings > Developer Settings > Personal access tokens > Tokens (classic) > Generate new token > Centang "repo" > Copy tokennya.*
+        
 
 6.  **Masuk kembali ke folder project**:
     ```bash
@@ -79,6 +80,9 @@ Kembali ke **Terminal** cPanel:
     ```bash
     python manage.py migrate
     ```
+    > **PENTING:** Perintah ini HANYA membuat **struktur tabel kosong** (seperti rumah tanpa perabot).
+    > Data isi (berita, guru, siswa, dll) **TIDAK** ikut otomatis.
+    > Untuk mengisi datanya, lihat **LANGKAH 6: Restore Data** di bawah.
 
 2.  **Kumpulkan File Statis** (CSS/JS/Gambar):
     ```bash
