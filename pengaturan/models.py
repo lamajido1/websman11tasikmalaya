@@ -85,24 +85,24 @@ class UpdateAplikasi(models.Model):
     tanggal = models.DateTimeField(auto_now_add=True)
     versi = models.CharField(max_length=50, help_text="Versi atau commit ID", blank=True)
     status = models.CharField(max_length=20, choices=[('Sukses', 'Sukses'), ('Gagal', 'Gagal')], default='Sukses')
-    log = models.TextField(blank=True, help_text="Log output dari proses update")
+    log = models.TextField(blank=True, help_text="Log output dari proses sinkronisasi")
     
     def __str__(self):
-        return f"Update {self.tanggal.strftime('%d-%m-%Y %H:%M')}"
+        return f"Push {self.tanggal.strftime('%d-%m-%Y %H:%M')}"
         
     class Meta:
-        verbose_name_plural = "Update Aplikasi"
+        verbose_name_plural = "Sinkronisasi ke GitHub"
         db_table = 'sekolah_updateaplikasi'
 
 class KonfigurasiServer(models.Model):
     url_git_remote = models.CharField(
         max_length=255, 
-        help_text="Format: ssh://user@ip_public_anda:port/path/ke/repo (Contoh: ssh://adi@103.10.10.10:22/c/laragon/www/websman11)",
+        help_text="URL Repository GitHub (Contoh: https://github.com/username/repo.git)",
         default="origin"
     )
     ssh_public_key = models.TextField(
         blank=True, 
-        help_text="Salin key ini dan masukkan ke file 'authorized_keys' di komputer lokal Anda."
+        help_text="Opsional: SSH Public Key jika menggunakan SSH."
     )
     
     def save(self, *args, **kwargs):
@@ -111,8 +111,8 @@ class KonfigurasiServer(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return "Konfigurasi Server & Git"
+        return "Konfigurasi GitHub"
         
     class Meta:
-        verbose_name_plural = "Konfigurasi Server"
+        verbose_name_plural = "Konfigurasi GitHub"
         db_table = 'sekolah_konfigurasiserver'
