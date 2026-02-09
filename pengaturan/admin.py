@@ -77,8 +77,17 @@ class PushGitHubAdmin(admin.ModelAdmin):
             log_output.append(result.stdout)
             
             log_output.append("\n=== GIT PUSH ===")
-            # Push ke branch main
-            result = subprocess.run(['git', 'push', '-u', 'origin', 'main'], capture_output=True, text=True, cwd=os.getcwd())
+            # Get current branch name
+            branch_result = subprocess.run(['git', 'rev-parse', '--abbrev-ref', 'HEAD'], capture_output=True, text=True, cwd=os.getcwd())
+            current_branch = branch_result.stdout.strip()
+            
+            if not current_branch:
+                current_branch = 'main' # Fallback
+                
+            log_output.append(f"Pushing to branch: {current_branch}")
+            
+            # Push ke current branch
+            result = subprocess.run(['git', 'push', '-u', 'origin', current_branch], capture_output=True, text=True, cwd=os.getcwd())
             log_output.append(result.stdout)
             if result.stderr:
                 log_output.append(f"STDERR: {result.stderr}")
