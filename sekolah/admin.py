@@ -1,20 +1,22 @@
 from django.contrib import admin
+from pengaturan.admin import BasePerPageAdmin
 from .models import Pengumuman, Guru, Halaman
 
+
 @admin.register(Pengumuman)
-class PengumumanAdmin(admin.ModelAdmin):
+class PengumumanAdmin(BasePerPageAdmin):
     list_display = ('judul', 'tanggal')
     search_fields = ('judul',)
     list_per_page = 20
 
 @admin.register(Guru)
-class GuruAdmin(admin.ModelAdmin):
+class GuruAdmin(BasePerPageAdmin):
     list_display = ('nama', 'nip', 'mata_pelajaran')
     search_fields = ('nama', 'nip', 'mata_pelajaran')
     list_per_page = 20
 
 @admin.register(Halaman)
-class HalamanAdmin(admin.ModelAdmin):
+class HalamanAdmin(BasePerPageAdmin):
     list_display = ('judul', 'slug', 'aktif')
     prepopulated_fields = {'slug': ('judul',)}
     list_filter = ('aktif',)

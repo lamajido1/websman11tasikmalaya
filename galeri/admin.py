@@ -1,5 +1,7 @@
 from django.contrib import admin
+from pengaturan.admin import BasePerPageAdmin
 from .models import Galeri, FotoGaleri
+
 
 class FotoGaleriInline(admin.TabularInline):
     model = FotoGaleri
@@ -7,7 +9,7 @@ class FotoGaleriInline(admin.TabularInline):
     fields = ('gambar', 'keterangan')
 
 @admin.register(Galeri)
-class GaleriAdmin(admin.ModelAdmin):
+class GaleriAdmin(BasePerPageAdmin):
     list_display = ('judul', 'tanggal')
     list_per_page = 20
     inlines = [FotoGaleriInline]

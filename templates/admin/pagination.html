@@ -1,0 +1,54 @@
+{% load i18n %}
+
+{% if pagination_required %}
+<div class="paginator">
+  <form method="get" style="display:inline-flex;align-items:center;gap:4px;margin-right:8px;">
+    <span>Tampilkan</span>
+    <select name="per_page" onchange="this.form.submit()" style="height:24px;padding:0 4px;">
+      <option value="10"{% if current_per_page == 10 %} selected{% endif %}>10</option>
+      <option value="50"{% if current_per_page == 50 %} selected{% endif %}>50</option>
+      <option value="100"{% if current_per_page == 100 %} selected{% endif %}>100</option>
+    </select>
+    <span>data per halaman</span>
+
+    {# Pertahankan filter dan pencarian lain saat ganti per_page #}
+    {% for key, value in request.GET.items %}
+      {% if key != 'per_page' and key != 'p' %}
+        <input type="hidden" name="{{ key }}" value="{{ value }}">
+      {% endif %}
+    {% endfor %}
+  </form>
+
+  {% if cl.result_count %}
+    <span class="end">
+      {{ cl.result_count }}
+      {% if cl.result_count == 1 %}
+        {% trans "result" %}
+      {% else %}
+        {% trans "results" %}
+      {% endif %}
+    </span>
+  {% endif %}
+
+  {% if page_range %}
+    {% if cl.page_num %}
+      <a href="?p=0{% if getvars %}&{{ getvars }}{% endif %}">&laquo; {% trans 'First' %}</a>
+      <a href="?p={{ cl.page_num|add:'-1' }}{% if getvars %}&{{ getvars }}{% endif %}">&lsaquo; {% trans 'Previous' %}</a>
+    {% endif %}
+
+    {% for i in page_range %}
+      {% if i == cl.page_num %}
+        <span class="this-page">{{ i|add:'1' }}</span>
+      {% else %}
+        <a href="?p={{ i }}{% if getvars %}&{{ getvars }}{% endif %}">{{ i|add:'1' }}</a>
+      {% endif %}
+    {% endfor %}
+
+    {% if cl.page_num != cl.paginator.num_pages|add:'-1' %}
+      <a href="?p={{ cl.page_num|add:'1' }}{% if getvars %}&{{ getvars }}{% endif %}">{% trans 'Next' %} &rsaquo;</a>
+      <a href="?p={{ cl.paginator.num_pages|add:'-1' }}{% if getvars %}&{{ getvars }}{% endif %}">{% trans 'Last' %} &raquo;</a>
+    {% endif %}
+  {% endif %}
+</div>
+{% endif %}
+

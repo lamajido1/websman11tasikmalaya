@@ -1,5 +1,7 @@
 {% extends 'sekolah/base.html' %}
 
+{% block title %}Galeri - {{ sekolah.nama_sekolah }}{% endblock %}
+
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4 text-center fw-bold">Galeri</h2>
@@ -7,7 +9,10 @@
         {% for item in galeri_list %}
         <div class="col-md-4 mb-4">
             <div class="card h-100 shadow-sm border-0">
-                <img src="{{ item.gambar.url }}" class="card-img-top" alt="{{ item.judul }}" style="height: 250px; object-fit: cover;">
+                <div class="position-relative">
+                    <img src="{{ item.gambar.url }}" class="card-img-top" alt="{{ item.judul }}" style="height: 250px; object-fit: cover;">
+                    <a href="{% url 'galeri_detail' item.pk %}" class="stretched-link"></a>
+                </div>
                 <div class="card-body">
                     <h5 class="card-title fw-bold">{{ item.judul }}</h5>
                     <p class="card-text text-muted small"><i class="bi bi-calendar"></i> {{ item.tanggal }}</p>

@@ -94,11 +94,29 @@ class UpdateAplikasi(models.Model):
         verbose_name_plural = "Sinkronisasi ke GitHub"
         db_table = 'sekolah_updateaplikasi'
 
+class BackupDatabase(models.Model):
+    tanggal = models.DateTimeField(auto_now_add=True)
+    file_backup = models.FileField(upload_to='backups/', blank=True, null=True)
+    status = models.CharField(max_length=20, choices=[('Sukses', 'Sukses'), ('Gagal', 'Gagal')], default='Sukses')
+    log = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"Backup {self.tanggal.strftime('%d-%m-%Y %H:%M')}"
+
+    class Meta:
+        verbose_name_plural = "Backup Database ke GitHub"
+        db_table = 'sekolah_backupdatabase'
+
 class KonfigurasiServer(models.Model):
     url_git_remote = models.CharField(
         max_length=255, 
         help_text="URL Repository GitHub (Contoh: https://github.com/username/repo.git)",
         default="origin"
+    )
+    mysqldump_path = models.CharField(
+        max_length=255,
+        default=r"C:\laragon82\bin\mysql\mysql-8.4.3-winx64\bin\mysqldump.exe",
+        help_text="Path lengkap ke file mysqldump.exe"
     )
     ssh_public_key = models.TextField(
         blank=True, 

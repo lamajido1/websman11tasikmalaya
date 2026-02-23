@@ -1,0 +1,45 @@
+{% extends 'sekolah/base.html' %}
+
+{% block title %}{{ galeri.judul }} - {{ sekolah.nama_sekolah }}{% endblock %}
+
+{% block content %}
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb p-3 bg-light rounded-3">
+    <li class="breadcrumb-item"><a href="{% url 'beranda' %}" class="text-decoration-none">Beranda</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'galeri' %}" class="text-decoration-none">Galeri</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{ galeri.judul }}</li>
+  </ol>
+</nav>
+
+<div class="row justify-content-center mb-4">
+  <div class="col-lg-10">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+      <img src="{{ galeri.gambar.url }}" class="card-img-top" alt="{{ galeri.judul }}" style="max-height: 400px; object-fit: cover;">
+      <div class="card-body">
+        <h1 class="h3 fw-bold mb-2">{{ galeri.judul }}</h1>
+        <p class="text-muted small mb-0"><i class="bi bi-calendar-event me-1"></i> {{ galeri.tanggal|date:"d F Y" }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  {% for foto in galeri.foto_foto.all %}
+  <div class="col-6 col-md-4 col-lg-3">
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+      <img src="{{ foto.gambar.url }}" class="card-img-top" alt="{{ foto.keterangan|default:galeri.judul }}" style="height: 200px; object-fit: cover;">
+      {% if foto.keterangan %}
+      <div class="card-body py-2">
+        <p class="card-text small text-muted mb-0">{{ foto.keterangan }}</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-12 text-center text-muted">
+    <p>Belum ada foto tambahan untuk galeri ini.</p>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}
+

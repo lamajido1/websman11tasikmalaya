@@ -1,6 +1,6 @@
 {% extends 'sekolah/base.html' %}
 
-{% block title %}Beranda - SMA Y8199{% endblock %}
+{% block title %}Beranda - {{ sekolah.nama_sekolah }}{% endblock %}
 
 {% block content %}
 <!-- Hero Section / Slider -->
@@ -123,7 +123,7 @@
             <div class="card-body p-4 text-center">
                 <h5 class="fw-bold mb-3">Pendaftaran Siswa Baru</h5>
                 <p class="small mb-4">Bergabunglah bersama kami untuk masa depan yang lebih cerah.</p>
-                <a href="#" class="btn btn-light text-primary w-100 fw-bold rounded-pill">Daftar Sekarang</a>
+                <a href="{% url 'halaman_detail' 'ppdb' %}" class="btn btn-light text-primary w-100 fw-bold rounded-pill">Daftar Sekarang</a>
             </div>
         </div>
     </div>
